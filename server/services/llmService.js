@@ -27,9 +27,9 @@ function getGenAI() {
 /**
  * Check if Gemini is available and working
  */
-export async function checkOllama() {
+export async function checkGeminiStatus() {
   const apiKey = process.env.GEMINI_API_KEY || "";
-  const modelName = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+  const modelName = process.env.GEMINI_MODEL || "gemini-1.5-flash";
 
   if (!apiKey || apiKey === "your_gemini_api_key_here") {
     console.warn("[Gemini] No valid API key found in GEMINI_API_KEY");
@@ -58,8 +58,8 @@ export async function checkOllama() {
  * @returns {string} response text
  */
 export async function generateWithGemini(prompt, options = {}) {
-  const modelName = process.env.GEMINI_MODEL || "gemini-2.5-flash";
-  const FALLBACK_MODEL = "gemini-2.5-flash-lite";
+  const modelName = process.env.GEMINI_MODEL || "gemini-1.5-flash";
+  const FALLBACK_MODEL = "gemini-1.5-flash";
 
   const genAI = getGenAI();
   
@@ -116,8 +116,6 @@ export async function generateWithGemini(prompt, options = {}) {
   }
 }
 
-// Keep backward compat alias
-export const generateWithOllama = generateWithGemini;
 
 /**
  * RAG-based chat response

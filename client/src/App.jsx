@@ -54,7 +54,7 @@ function Sidebar({ collapsed, setCollapsed }) {
         </div>
         {!collapsed && (
           <div className="overflow-hidden">
-            <div className="font-display font-bold text-white leading-none">StudyAI</div>
+            <div className="font-display font-bold text-white leading-none">StudySense AI</div>
             <div className="text-xs text-gray-500 mt-0.5">RAG Assistant</div>
           </div>
         )}
@@ -119,7 +119,7 @@ function Sidebar({ collapsed, setCollapsed }) {
               <div className="flex items-center gap-2 text-gray-400">
                 <StatusDot
                   status={
-                    health.services.ollama?.status === "connected" ? "ok" : "error"
+                    health.services.gemini?.status === "connected" ? "ok" : "error"
                   }
                 />
                 <span>Gemini LLM</span>

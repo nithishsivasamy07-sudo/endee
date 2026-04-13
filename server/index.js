@@ -26,7 +26,7 @@ import answerRouter from "./routes/answer.js";
 // Import services for startup checks
 import { getEndeeDB } from "./services/endeeService.js";
 import { warmupEmbedder } from "./services/embeddingService.js";
-import { checkOllama as checkGemini } from "./services/llmService.js";
+import { checkGeminiStatus } from "./services/llmService.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -82,7 +82,7 @@ app.get("/api/health", async (req, res) => {
   try {
     const db = await getEndeeDB();
     const stats = db.getStats();
-    const gemini = await checkGemini();
+    const gemini = await checkGeminiStatus();
 
     res.json({
       status: "ok",
@@ -159,7 +159,7 @@ async function startServer() {
 
     // Check Gemini
     console.log("✨ Checking Gemini LLM...");
-    const gemini = await checkGemini();
+    const gemini = await checkGeminiStatus();
     if (!gemini.available) {
       console.log("   ⚠️  Gemini not connected. Add your GEMINI_API_KEY to server/.env");
       console.log("   Get a free key at: https://aistudio.google.com/apikey\n");
