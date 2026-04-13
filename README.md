@@ -9,8 +9,7 @@
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License">
 </p>
 
-> **Submission for:** SDE / AI / ML Intern Role · Built within 24 Hours
-> ⭐ [Star the Endee Repository](https://github.com/endee-io/endee) · 🍴 [Fork It](https://github.com/endee-io/endee/fork)
+
 
 ---
 
