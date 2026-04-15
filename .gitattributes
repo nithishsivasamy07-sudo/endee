@@ -1,0 +1,20 @@
+# Explicitly mark files for GitHub Language stats
+# Treat all JavaScript and JSX as the primary code
+*.js linguist-language=JavaScript
+*.jsx linguist-language=JavaScript
+
+# Mark build outputs and vendor files as "vendored" so they don't count in stats
+client/dist/* linguist-vendored
+server/node_modules/* linguist-vendored
+client/node_modules/* linguist-vendored
+server/endee-db/* linguist-vendored
+server/uploads/* linguist-documentation
+
+# Ensure consistent line endings
+* text=auto eol=lf
+*.js text
+*.jsx text
+*.css text
+*.html text
+*.md text
+*.json text
