@@ -5,17 +5,16 @@
  * - RAG pipeline (Retrieve → Augment → Generate)
  * - Endee vector database
  * - HuggingFace embeddings (local, free)
- * - Google Gemini LLM
+ * - Ollama LLM (local, free)
  */
+
+import dotenv from "dotenv";
+dotenv.config();
 
 import express from "express";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
-import dotenv from "dotenv";
-
-// Load environment variables
-dotenv.config();
 
 // Import routes
 import uploadRouter from "./routes/upload.js";
@@ -26,7 +25,7 @@ import answerRouter from "./routes/answer.js";
 // Import services for startup checks
 import { getEndeeDB } from "./services/endeeService.js";
 import { warmupEmbedder } from "./services/embeddingService.js";
-import { checkGeminiStatus } from "./services/llmService.js";
+import { checkOllama } from "./services/llmService.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -38,12 +37,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "http://localhost:5175",
-    ],
+    origin: ["http://localhost:5173", "http://localhost:3000"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
@@ -54,10 +48,6 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
 // Serve uploaded files statically
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
-// Serve frontend static files
-const clientPath = path.join(__dirname, "../client/dist");
-app.use(express.static(clientPath));
 
 // ─── Request Logging ───────────────────────────────────────────────────────
 
@@ -82,7 +72,7 @@ app.get("/api/health", async (req, res) => {
   try {
     const db = await getEndeeDB();
     const stats = db.getStats();
-    const gemini = await checkGeminiStatus();
+    const llmStatus = await checkOllama();
 
     res.json({
       status: "ok",
@@ -94,11 +84,12 @@ app.get("/api/health", async (req, res) => {
           path: process.env.ENDEE_DB_PATH || "./endee-db",
           ...stats,
         },
-        gemini: {
-          status: gemini.available ? "connected" : "disconnected",
-          models: gemini.models.map((m) => m.name),
-          activeModel: process.env.GEMINI_MODEL || "gemini-2.5-flash",
-          provider: "Google Gemini",
+        llm: {
+          provider: llmStatus.provider,
+          status: llmStatus.available ? "connected" : "disconnected",
+          model: llmStatus.model || (llmStatus.provider === "gemini" ? "gemini-2.0-flash" : (process.env.OLLAMA_MODEL || "llama3.2")),
+          error: llmStatus.error,
+          availableModels: llmStatus.models ? llmStatus.models.map((m) => m.name) : [],
         },
         embeddings: {
           status: "ready",
@@ -131,9 +122,9 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Catch-all route to serve the React app for any other request
-app.use("*", (req, res) => {
-  res.sendFile(path.join(clientPath, "index.html"));
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ error: `Route not found: ${req.method} ${req.path}` });
 });
 
 // ─── Server Startup ────────────────────────────────────────────────────────
@@ -157,14 +148,24 @@ async function startServer() {
       console.warn("   ⚠️  Embedding warmup failed (will retry on first use):", e.message)
     );
 
-    // Check Gemini
-    console.log("✨ Checking Gemini LLM...");
-    const gemini = await checkGeminiStatus();
-    if (!gemini.available) {
-      console.log("   ⚠️  Gemini not connected. Add your GEMINI_API_KEY to server/.env");
-      console.log("   Get a free key at: https://aistudio.google.com/apikey\n");
+    // Check LLM
+    const llmProvider = process.env.LLM_PROVIDER || "ollama";
+    console.log(`🤖 Checking LLM (${llmProvider})...`);
+    const llmStatus = await checkOllama();
+    
+    if (llmProvider === "gemini") {
+      if (llmStatus.available) {
+        console.log("   ✅ Gemini API connected successfully\n");
+      } else {
+        console.log(`   ❌ Gemini API Error: ${llmStatus.error}\n`);
+      }
     } else {
-      console.log(`   ✅ Gemini connected (model: ${gemini.models.map(m=>m.name).join(", ")})\n`);
+      if (!llmStatus.available) {
+        console.log("   ⚠️  Ollama not found. Please install and run:");
+        console.log("   https://ollama.com → ollama pull llama3.2 → ollama serve\n");
+      } else {
+        console.log(`   ✅ Ollama connected (${llmStatus.models.length} models available)\n`);
+      }
     }
 
     app.listen(PORT, () => {

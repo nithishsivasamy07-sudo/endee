@@ -252,7 +252,7 @@ export default function ChatPage() {
             </div>
             <h2 className="font-display text-xl font-semibold text-white mb-2">Ask Anything</h2>
             <p className="text-gray-500 text-sm max-w-sm mb-8">
-              Your questions are answered using RAG — semantic search over your documents + Gemini AI generation.
+              Your questions are answered using RAG — semantic search over your documents + Gemini LLM generation.
             </p>
             {documents.length === 0 && (
               <p className="text-yellow-400/80 text-sm mb-6 bg-yellow-500/10 border border-yellow-500/20 rounded-xl px-4 py-2">

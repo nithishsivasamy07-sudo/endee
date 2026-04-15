@@ -1,17 +1,12 @@
 {
-  "name": "ai-study-assistant-monorepo",
+  "name": "ai-study-assistant",
   "version": "1.0.0",
-  "description": "Unified management for StudySense AI Client and Server",
+  "description": "AI Study Assistant with RAG + Endee Vector DB",
   "private": true,
   "scripts": {
-    "install-all": "npm install && cd client && npm install && cd ../server && npm install",
-    "client": "cd client && npm run dev",
-    "server": "cd server && npm run dev",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "build": "cd client && npm run build",
-    "start": "cd server && npm start"
-  },
-  "devDependencies": {
-    "concurrently": "^8.2.0"
+    "install:all": "cd server && npm install && cd ../client && npm install",
+    "dev:server": "cd server && node index.js",
+    "dev:client": "cd client && npm run dev",
+    "setup": "npm run install:all && echo '\n✅ Setup complete! Read README.md for next steps.'"
   }
 }

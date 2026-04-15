@@ -1,89 +1,139 @@
-# 🎓 StudySense AI: Intelligent Study Assistant
+<p align="center">
+  <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="docs/assets/logo-dark.svg">
+      <source media="(prefers-color-scheme: light)" srcset="docs/assets/logo-light.svg">
+      <img height="100" alt="Endee" src="docs/assets/logo-dark.svg">
+  </picture>
+</p>
 
-[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
-[![Gemini AI](https://img.shields.io/badge/Gemini_AI-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://aistudio.google.com/)
-[![Endee VectorDB](https://img.shields.io/badge/Endee_VectorDB-8A2BE2?style=for-the-badge)](https://github.com/nithishsivasamy07-sudo/endee)
+<p align="center">
+    <b>High-performance open-source vector database for AI search, RAG, semantic search, and hybrid retrieval.</b>
+</p>
 
-StudySense AI transforms static PDFs and DOCX files into dynamic, interactive learning environments. Using a sophisticated **RAG (Retrieval-Augmented Generation)** pipeline, it allows students to talk to their notes, generate exam-ready answers, and test themselves with AI-powered quizzes.
+<p align="center">
+    <a href="./docs/getting-started.md"><img src="https://img.shields.io/badge/Quick_Start-Local_Setup-success?style=flat-square" alt="Quick Start"></a>
+    <a href="https://docs.endee.io/quick-start"><img src="https://img.shields.io/badge/Docs-Quick_Start-success?style=flat-square" alt="Docs"></a>
+    <a href="https://github.com/endee-io/endee/blob/master/LICENSE"><img src="https://img.shields.io/github/license/endee-io/endee?style=flat-square" alt="License"></a>
+    <a href="https://discord.gg/5HFGqDZQE3"><img src="https://img.shields.io/badge/Discord-Join_Chat-5865F2?logo=discord&style=flat-square" alt="Discord"></a>
+    <a href="https://endee.io/"><img src="https://img.shields.io/badge/Website-Endee-111111?style=flat-square" alt="Website"></a>
+    <!-- <a href="https://endee.io/benchmarks"><img src="https://img.shields.io/badge/Benchmarks-Coming_Soon-1F8B4C?style=flat-square" alt="Benchmarks"></a> -->
+    <!-- <a href="https://endee.io/cloud"><img src="https://img.shields.io/badge/Cloud-Coming_Soon-2496ED?style=flat-square" alt="Cloud"></a> -->
+</p>
 
----
+<p align="center">
+<strong><a href="./docs/getting-started.md">Quick Start</a> • <a href="#why-endee">Why Endee</a> • <a href="#use-cases">Use Cases</a> • <a href="#features">Features</a> • <a href="#api-and-clients">API and Clients</a> • <a href="#docs-and-links">Docs</a> • <a href="#community-and-contact">Contact</a></strong>
+</p>
 
-## 🚀 Key Features
+# Endee: Open-Source Vector Database for AI Search
 
-| Feature | Description |
-| :--- | :--- |
-| 🧠 **Intelligent RAG** | Uses `all-MiniLM-L6-v2` for local embeddings and Gemini 1.5 for context-aware reasoning. |
-| 📁 **Universal Upload** | Seamlessly parse and index PDF/DOCX files with real-time feedback. |
-| 💬 **Semantic Chat** | Chat with your documents. No hallucinations, only evidence-based answers. |
-| 📝 **Exam Generator** | Generate MCQ, Short, and Long answer quizzes tailored to your content. |
-| 🎨 **Premium UI** | A sleek, dark-mode professional dashboard built with React and Tailwind CSS. |
+**Endee** is a high-performance open-source vector database built for AI search and retrieval workloads. It is designed for teams building **RAG pipelines**, **semantic search**, **hybrid search**, recommendation systems, and filtered vector retrieval APIs that need production-oriented performance and control.
 
----
+Endee combines vector search with filtering, sparse retrieval support, backup workflows, and deployment flexibility across local builds and Docker-based environments. The project is implemented in C++ and optimized for modern CPU targets, including AVX2, AVX512, NEON, and SVE2.
 
-## 🏗️ Project Architecture
+If you want the fastest path to evaluate Endee locally, start with the [Getting Started guide](./docs/getting-started.md) or the hosted docs at [docs.endee.io](https://docs.endee.io/quick-start).
 
-StudySense AI operates on a modern full-stack architecture designed for performance and privacy.
+## Why Endee
 
-```text
-ai-study-assistant/
-├── client/                 # 🏠 React Frontend (Vite)
-│   ├── src/
-│   │   ├── pages/          # Upload, Chat, Quiz, Answer views
-│   │   ├── components/     # UI Building blocks (Sidebar, Status Dots)
-│   │   └── App.jsx         # Routing and Main Layout
-├── server/                 # 🚀 Node.js Backend (Express)
-│   ├── routes/             # API Endpoints (Chat, Quiz, Upload)
-│   ├── services/           # Core AI Logic (RAG, Embeddings, DB)
-│   └── endee-db/           # Persistent local vector store
-├── .gitattributes          # GitHub language & config
-├── .gitignore              # Environment & Dependency protection
-└── package.json            # Monorepo management scripts
-```
+- Built as a dedicated vector database for AI applications, search systems, and retrieval-heavy workloads.
+- Supports dense vector retrieval plus sparse search capabilities for hybrid search use cases.
+- Includes payload filtering for metadata-aware retrieval and application-specific query logic.
+- Ships with operational features already documented in this repo, including backup flows and runtime observability.
+- Offers flexible deployment paths: local scripts, manual builds, Docker images, and prebuilt registry images.
 
-### The RAG Pipeline
-1. **Ingestion**: PDFs/DOCX are parsed and split into overlapping chunks to preserve context.
-2. **Embedding**: Chunks are vectorized locally using `all-MiniLM-L6-v2`.
-3. **Retrieval**: User queries are vectorized and matched against the **Endee Vector DB** using cosine similarity.
-4. **Generation**: Top-K context chunks are injected into **Gemini 1.5 Flash** to generate grounded responses.
+## Getting Started
 
----
+The full installation, build, Docker, runtime, and authentication instructions are in [docs/getting-started.md](./docs/getting-started.md).
 
-## 🛠️ Quick Start
+Fastest local path:
 
-### 1. Unified Setup
 ```bash
-# Clone the repository
-git clone https://github.com/your-username/ai-study-assistant.git
-cd ai-study-assistant
-
-# Install all dependencies (Root, Client, and Server)
-npm install && npm run install-all
+chmod +x ./install.sh ./run.sh
+./install.sh --release --avx2
+./run.sh
 ```
 
-### 2. Configuration
-Create a `.env` file in the `server/` directory:
-```env
-GEMINI_API_KEY=your_api_key_here
-PORT=5000
-ENDEE_DB_PATH=./endee-db
-```
+The server listens on port `8080`. For detailed setup paths, supported operating systems, CPU optimization flags, Docker usage, and authentication examples, use:
 
-### 3. Run Development
-```bash
-# Start both client and server simultaneously
-npm run dev
-```
-Visit http://localhost:5173 (Client) or http://localhost:5000 (Unified).
+- [Getting Started](./docs/getting-started.md)
+- [Hosted Quick Start Docs](https://docs.endee.io/quick-start)
 
----
+## Use Cases
 
-## 🗺️ Roadmap
-- [ ] **Multi-Document Support**: Query across multiple files simultaneously.
-- [ ] **PDF Export**: Save your AI-generated quizzes and exam responses as styled PDFs.
-- [ ] **Flashcard Integration**: One-click export of study notes to Anki/Quizlet.
-- [ ] **Image-to-Context**: Reasoning across diagrams and charts using Gemini Vision.
+### RAG and AI Retrieval
 
----
+Use Endee as the retrieval layer for question answering, chat assistants, copilots, and other RAG applications that need fast vector search with metadata-aware filtering.
 
-<p align="center">Made with ❤️ for the Endee Internship Evaluation · Built with React, Node, and Gemini AI</p>
+### Agentic AI and AI Agent Memory
+
+Use Endee as the long-term memory and context retrieval layer for AI agents built with frameworks like LangChain, CrewAI, AutoGen, and LlamaIndex. Store and retrieve past observations, tool outputs, conversation history, and domain knowledge mid-execution with low-latency filtered vector search, so your autonomous agents get the right context without stalling their reasoning loop.
+
+### Semantic Search
+
+Build semantic search experiences for documents, products, support content, and knowledge bases using vector similarity search instead of exact keyword-only matching.
+
+### Hybrid Search
+
+Combine dense retrieval, sparse vectors, and filtering to improve relevance for search workflows where both semantic understanding and term-level precision matter.
+
+### Recommendations and Matching
+
+Support recommendation, similarity matching, and nearest-neighbor retrieval workflows across text, embeddings, and other high-dimensional representations.
+
+## Features
+
+- **Vector search** for AI retrieval and semantic similarity workloads.
+- **Hybrid retrieval support** with sparse vector capabilities documented in [docs/sparse.md](./docs/sparse.md).
+- **Payload filtering** for structured retrieval logic documented in [docs/filter.md](./docs/filter.md).
+- **Backup APIs and flows** documented in [docs/backup-system.md](./docs/backup-system.md).
+- **Operational logging and instrumentation** documented in [docs/logs.md](./docs/logs.md) and [docs/mdbx-instrumentation.md](./docs/mdbx-instrumentation.md).
+- **CPU-targeted builds** for AVX2, AVX512, NEON, and SVE2 deployments.
+- **Docker deployment options** for local and server environments.
+
+## API and Clients
+
+Endee exposes an HTTP API for managing indexes and serving retrieval workloads. The current repo documentation and examples focus on running the server directly and calling its API endpoints.
+
+Current developer entry points:
+
+- [Getting Started](./docs/getting-started.md) for local build and run flows
+- [Hosted Docs](https://docs.endee.io/quick-start) for product documentation
+- [Release Notes 1.0.0](https://github.com/endee-io/endee/releases/tag/1.0.0) for recent platform changes
+
+## Docs and Links
+
+- [Getting Started](./docs/getting-started.md)
+- [Hosted Documentation](https://docs.endee.io/quick-start)
+- [Release Notes](https://github.com/endee-io/endee/releases/tag/1.0.0)
+- [Sparse Search](./docs/sparse.md)
+- [Filtering](./docs/filter.md)
+- [Backups](./docs/backup-system.md)
+
+## Community and Contact
+
+- Join the community on [Discord](https://discord.gg/5HFGqDZQE3)
+- Visit the website at [endee.io](https://endee.io/)
+- For trademark or branding permissions, contact [enterprise@endee.io](mailto:enterprise@endee.io)
+
+## Contributing
+
+We welcome contributions from the community to help make vector search faster and more accessible for everyone.
+
+- Submit pull requests for fixes, features, and improvements
+- Report bugs or performance issues through GitHub issues
+- Propose enhancements for search quality, performance, and deployment workflows
+
+## License
+
+Endee is open source software licensed under the **Apache License 2.0**. See the [LICENSE](./LICENSE) file for full terms.
+
+## Trademark and Branding
+
+“Endee” and the Endee logo are trademarks of Endee Labs.
+
+The Apache License 2.0 does not grant permission to use the Endee name, logos, or branding in a way that suggests endorsement or affiliation.
+
+If you offer a hosted or managed service based on this software, you must use your own branding and avoid implying it is an official Endee service.
+
+## Third-Party Software
+
+This project includes or depends on third-party software components licensed under their respective open-source licenses. Use of those components is governed by their own license terms.

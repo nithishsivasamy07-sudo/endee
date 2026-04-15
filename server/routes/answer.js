@@ -78,10 +78,10 @@ router.post("/", async (req, res) => {
   } catch (error) {
     console.error("[Answer] Error:", error);
 
-    if (error.message.includes("Gemini") || error.message.includes("API Key") || error.message.includes("Model")) {
+    if (error.message.includes("Ollama")) {
       return res.status(503).json({
         error: error.message,
-        hint: "Check your Gemini API key and model name in server/.env. Get a key at https://aistudio.google.com/apikey",
+        hint: "Make sure Ollama is running: ollama serve",
       });
     }
 
